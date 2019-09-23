@@ -1,0 +1,14 @@
+# Used to compare WebRTC against all of GitHub
+SELECT
+  _TABLE_SUFFIX as period,
+  SUBSTR(_TABLE_SUFFIX, 1, 4) as year,
+  
+  SUBSTR(_TABLE_SUFFIX, 5,2) as month,
+  count(distinct repo.id) AS repos,
+  count(distinct actor.id) as users,
+  count(distinct org.id) as orgs
+FROM  `githubarchive.month.201909`
+WHERE
+  CAST('2019' as INT64) >= 2015 AND (type="PushEvent" OR type="PullRequestEvent" OR type="PullRequestReviewCommentEvent")
+GROUP BY period, year, month
+ORDER BY period asc
